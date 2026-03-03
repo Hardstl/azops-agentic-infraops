@@ -7,6 +7,8 @@ This repository demonstrates AVM-first Azure Bicep authoring with enforced decis
 
 Both solutions target consistent outcomes: documented service-option analysis, explicit option selection, policy-aligned Bicep authoring, and validation evidence.
 
+Inspired by [azure-agentic-infraops](https://github.com/jonathan-vella/azure-agentic-infraops). This repository is a lightweight version with AzOps support.
+
 ## Project Structure
 
 - [.github/copilot-instructions.md](.github/copilot-instructions.md): repository-wide behavior and mandatory gates
