@@ -1,0 +1,8 @@
+{
+  "enabledByDefault": true,
+  "azopsRoot": "C:/path/to/azops-repo/root",
+  "privateDnsManagedByPolicy": true,
+  "discovery": {
+    "maxDepth": 10
+  }
+}
