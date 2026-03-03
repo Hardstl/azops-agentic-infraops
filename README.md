@@ -1,15 +1,39 @@
-# azops-agentic-infraops: Dual Agent Authoring for Azure Bicep
+# 🎉 azops-agentic-infraops: Dual Agent Authoring for Azure Bicep
 
-This repository demonstrates AVM-first Azure Bicep authoring with enforced decision gates, secure defaults, and evidence capture. It includes two agent solutions you can use to drive the same infrastructure workflow:
+Welcome to a practical (and slightly less boring) way to do Azure InfraOps.
+
+This repo demonstrates AVM-first Azure Bicep authoring with decision gates, secure defaults, and evidence capture. You get two agent paths that drive the same disciplined workflow:
 
 - **Solution A:** GitHub Copilot agent artifacts under `.github/`
 - **Solution B:** Codex skill artifacts under `.codex/`
 
-Both solutions target consistent outcomes: documented service-option analysis, explicit option selection, policy-aligned Bicep authoring, and validation evidence.
+Both solutions target the same endgame: documented service-option analysis, explicit option selection, policy-aligned Bicep authoring, and validation evidence.
 
-Inspired by [azure-agentic-infraops](https://github.com/jonathan-vella/azure-agentic-infraops). This repository is a lightweight version with AzOps support.
+Inspired by [azure-agentic-infraops](https://github.com/jonathan-vella/azure-agentic-infraops). This is a lightweight version with AzOps support.
 
-## Project Structure
+## 🤖 What is agentic coding?
+
+Agentic coding means the AI doesn’t just autocomplete lines, it follows a full workflow.
+In this repo, agents gather required inputs, compare service options, enforce decision checkpoints, generate AVM-aligned Bicep, run validation checks, and record why each decision was made.
+So instead of a single one-shot answer, you get repeatable infrastructure authoring with clear reasoning and verification.
+
+## 🧑‍🚀 Agent roster (GitHub path)
+
+- [avm-author.agent.md](.github/agents/avm-author.agent.md): Primary authoring agent. Enforces mandatory inputs and option gates, then writes AVM-first Bicep.
+- [ms-docs-researcher.agent.md](.github/agents/ms-docs-researcher.agent.md): Research specialist. Pulls official Microsoft Learn evidence for service capabilities and options.
+- [ms-code-verifier.agent.md](.github/agents/ms-code-verifier.agent.md): API verifier. Confirms Microsoft SDK/API names, signatures, and sample patterns.
+- [bicep-authoring-validator.agent.md](.github/agents/bicep-authoring-validator.agent.md): Final quality gate. Performs strict pass/fail validation against repo rules.
+
+## 🔁 Sequence we run things in
+
+1. Start with `avm-author` to collect required inputs and constraints.
+2. Run option analysis using Microsoft Learn evidence (typically via `ms-docs-researcher`).
+3. Confirm explicit service option selections.
+4. Author Bicep with `avm-author`.
+5. Verify API details where needed with `ms-code-verifier`.
+6. Validate everything with `bicep-authoring-validator` (must pass before finalizing).
+
+## 📂 Project Structure
 
 - [.github/copilot-instructions.md](.github/copilot-instructions.md): repository-wide behavior and mandatory gates
 - [.github/agents/](.github/agents/): role-based Copilot agents (author, validator, docs researcher, code verifier)
@@ -17,13 +41,13 @@ Inspired by [azure-agentic-infraops](https://github.com/jonathan-vella/azure-age
 - [.codex/skills/](.codex/skills/): Codex skill equivalents
 - [infra/](infra): generated infrastructure outputs and evidence
 
-## Solution A: GitHub Copilot Agent Setup (`.github`)
+## 🟢 Path A: GitHub Copilot Agent Setup (`.github`)
 
-### What it uses
+### What it includes
 
 - Always-on repository rules: [.github/copilot-instructions.md](.github/copilot-instructions.md)
 - Specialized agents: [.github/agents/avm-author.agent.md](.github/agents/avm-author.agent.md), [.github/agents/bicep-authoring-validator.agent.md](.github/agents/bicep-authoring-validator.agent.md), [.github/agents/ms-docs-researcher.agent.md](.github/agents/ms-docs-researcher.agent.md), [.github/agents/ms-code-verifier.agent.md](.github/agents/ms-code-verifier.agent.md)
-- Prompt and skill guidance under `.github/skills` and `.github/prompts`
+- Skill guidance under `.github/skills`
 
 ### Install and run
 
@@ -37,11 +61,11 @@ Inspired by [azure-agentic-infraops](https://github.com/jonathan-vella/azure-age
 
     ![Agent selection in VS Code](docs/agent-selection.png)
 
-7. Prompt to create a resource.
+7. Prompt the agent to create a resource.
 
-## Solution B: Codex Skill Setup (`.codex`)
+## 🟣 Path B: Codex Skill Setup (`.codex`)
 
-### What it uses
+### What it includes
 
 - Codex skill definitions: [.codex/skills/bicep-avm-author/SKILL.md](.codex/skills/bicep-avm-author/SKILL.md)
 - Supporting references under `.codex/skills/*/references`
@@ -54,14 +78,14 @@ Inspired by [azure-agentic-infraops](https://github.com/jonathan-vella/azure-age
 4. Start authoring tasks by invoking the Bicep AVM skill workflow and follow its mandatory option-analysis and input gates.
 5. Run diagnostics/build/lint steps defined by the skill before considering output complete.
 
-## Using with AzOps
+## 🧭 Using with AzOps
 
 To use this directly in an existing AzOps repository, copy one skill system folder to the **root of your AzOps repo**:
 
 - Copy `.github/` if you use GitHub Copilot in VS Code.
 - Copy `.codex/` if you use a Codex-compatible runtime.
 
-You typically only need one of these folders. Keeping one avoids conflicting instructions and keeps behavior predictable.
+You usually only need one of these folders. Keeping one avoids conflicting instructions and keeps behavior predictable.
 
 ### Example (PowerShell)
 
@@ -81,7 +105,7 @@ Also update AzOps path settings in the copied config file before authoring:
 
 Set the path values in `azops-config.json` to match your actual AzOps repository structure.
 
-## MCP Server Configuration (Per Setup)
+## 🔌 MCP Server Configuration (Per Setup)
 
 Authoritative inventory: MCP server list used by this repository setup.
 
@@ -97,14 +121,7 @@ Authoritative inventory: MCP server list used by this repository setup.
 2. Verify the tools are callable from your agent runtime.
 3. Keep the MCP server inventory aligned with actual enabled servers.
 
-## Setup Comparison
-
-| Setup | Primary Artifacts | Best For | Required MCP Servers |
-| --- | --- | --- | --- |
-| Copilot (`.github`) | `copilot-instructions`, `agents`, `prompts`, `.github/skills` | VS Code + GitHub Copilot workflows | `azure`, `microsoft_learn`, `bicep` |
-| Codex (`.codex`) | `.codex/skills` and references | Codex-native skill execution | `azure`, `microsoft_learn`, `bicep` |
-
-## Typical Authoring Flow (Both Setups)
+## 🚦 Typical Authoring Flow (Both Setups)
 
 1. Provide mandatory inputs and constraints.
 2. Run service option analysis using Microsoft Learn tools.
@@ -113,7 +130,7 @@ Authoritative inventory: MCP server list used by this repository setup.
 5. Run diagnostics/build/lint.
 6. Preserve authoring evidence with selected options and source links.
 
-## Standard Workflow: Prompt to Files
+## 🚀 Standard Workflow: Prompt to Files
 
 Start with this simple prompt:
 
